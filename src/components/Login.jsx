@@ -1,25 +1,67 @@
 import React from 'react'
+import { useForm } from 'react-hook-form'
+import { zodResolver } from "@hookform/resolvers/zod"
+import { loginSchema } from "../loginValidationSchema"
+import { NavLink } from 'react-router-dom'
+import axios from 'axios'
 
 const Login = () => {
-    return (
-        <div className='bg-gray-900 min-h-screen p-10 flex justify-center items-center'>
-            <div className='size-[400px] bg-gray-800 rounded-lg p-5'>
-                <h1 className='text-3xl font-bold mb-12 text-white text-center'>LOGIN FORM</h1>
-                <form className='flex flex-col gap-5'>
-                    <div>
-                        <label htmlFor="email" className='block text-white'>Email<sup className="text-red-500">*</sup></label>
-                        <input type="email" placeholder='Email' id='email' className='p-2 w-full border border-gray-
-                500 rounded-md' />
-                    </div>
-                    <div>
-                        <label htmlFor="password" className='block text-white'>Password<sup className="text-red-500">*</sup></label>
-                        <input type="password" placeholder='Password' id='password' className='p-2 w-full border border-gray-
-                500 rounded-md' />
-                    </div>
-                    <button className='mt-5 bg-blue-500 hover:bg-blue-700 text-white text-2xl h-14 rounded'>Login</button>
-                </form>
-            </div>
+    const { register, handleSubmit, formState: { errors } } = useForm({
+        resolver: zodResolver(loginSchema),
+    })
 
+    const onSubmit = async (data) => {
+        try {
+            console.log("Login data: ", data)
+            // Make the API request here
+            const response = await axios.post('http://localhost:8080/auth/login', data);
+            if (response.status == 200) {
+                console.log(response);
+                localStorage.setItem('token', response.data.token);
+                localStorage.setItem('username', response.data.username);
+                localStorage.setItem('email', response.data.email);
+                localStorage.setItem('role', response.data.role);
+                window.location.href = '/';
+            } else {
+                alert("Invalid credentials");
+            }
+        } catch (error) {
+            console.error("Error logging in: ", error.response.data)
+            alert(error.response.data.error)
+        }
+    }
+
+    return (
+        <div className='flex flex-col justify-center items-center w-full h-screen bg-gray-900'>
+            <form onSubmit={handleSubmit(onSubmit)} className='bg-gray-800 p-8 rounded-lg shadow-lg lg:w-[35rem] md:w-[30rem] text-white space-y-4'>
+                <h1 className='text-2xl font-bold text-white text-center uppercase'>Login Form</h1>
+
+                <div>
+                    <label htmlFor="email" className='block mb-2'>Email<sup className="text-red-500">*</sup></label>
+                    <input type="email"
+                        id='email'
+                        {...register('email')}
+                        className='border rounded p-2 w-full text-gray-800' />
+                    {errors.email && <p className='text-red-500'>{errors.email.message}</p>}
+                </div>
+
+                <div>
+                    <label htmlFor="password" className="block mb-2">Password<sup className="text-red-500">*</sup></label>
+                    <input
+                        id="password"
+                        type="password"
+                        {...register('password')}
+                        className="border rounded p-2 w-full text-gray-800"
+                    />
+                    {errors.password && <p className="text-red-500">{errors.password.message}</p>}
+                </div>
+
+                <div className='mb-5 text-right'>
+                    Don't have an account? <NavLink to="/add-user" className="text-blue-600 hover:underline">Register</NavLink>
+                </div>
+
+                <button type='submit' className='bg-blue-500 text-white p-2 rounded w-full hover:bg-blue-800'>Login</button>
+            </form>
         </div>
     )
 }

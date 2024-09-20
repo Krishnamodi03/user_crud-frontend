@@ -18,7 +18,7 @@ const UserList = () => {
     const [pageSize, setPageSize] = useState(5);
     const [loading, setLoading] = useState(false);
 
-    const bearerToken = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJFbWFpbCI6ImtyaXNobmExMjNAZ21haWwuY29tIiwiRmlyc3RfbmFtZSI6IktyaXNobmEiLCJMYXN0X25hbWUiOiJNb2RpIiwiVWlkIjoiNjZlZDA1MGY1ZTQzMDQxMDc0MDkzMDA1IiwiVXNlcl90eXBlIjoiQURNSU4iLCJleHAiOjE3MjY4MzE0MDR9.AH7l-RjhH-s_FD1ZWG7pO0cPMZz5w7Z6oMsX330Z8fo";
+    const bearerToken = localStorage.getItem("token")
 
     useEffect(() => {
         const fetchUsers = async (page) => {
