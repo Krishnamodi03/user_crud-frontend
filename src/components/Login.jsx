@@ -18,9 +18,6 @@ const Login = () => {
             if (response.status == 200) {
                 console.log(response);
                 localStorage.setItem('token', response.data.token);
-                localStorage.setItem('username', response.data.username);
-                localStorage.setItem('email', response.data.email);
-                localStorage.setItem('role', response.data.role);
                 window.location.href = '/';
             } else {
                 alert("Invalid credentials");
