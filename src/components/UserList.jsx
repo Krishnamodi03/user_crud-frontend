@@ -18,6 +18,8 @@ const UserList = () => {
     const [pageSize, setPageSize] = useState(5);
     const [loading, setLoading] = useState(false);
 
+    const totalPages = Math.ceil(totalRecords / pageSize)
+
     const bearerToken = localStorage.getItem("token")
 
     useEffect(() => {
@@ -43,7 +45,7 @@ const UserList = () => {
         fetchUsers(currentPage);
     }, [currentPage, pageSize]);
 
-    const filteredUsers = users.filter(user =>
+    const filteredUsers = users?.filter(user =>
         user.first_name.toLowerCase().includes(search.toLowerCase()) ||
         user.last_name.toLowerCase().includes(search.toLowerCase()) ||
         user.email.toLowerCase().includes(search.toLowerCase()) ||
@@ -97,7 +99,7 @@ const UserList = () => {
                                 <td colSpan="5" className="text-center py-4">Loading...</td>
                             </tr>
                         ) : (
-                            filteredUsers.map((user) => (
+                            filteredUsers?.map((user) => (
                                 <tr key={user._id} className="hover:bg-gray-700 border">
                                     <td className="px-4 py-2 border">{user.email}</td>
                                     <td className="px-4 py-2 border">{`${user.first_name} ${user.last_name}`}</td>
@@ -123,7 +125,7 @@ const UserList = () => {
                             <PaginationPrevious
                                 onClick={() => {
                                     if (currentPage > 1) {
-                                        setCurrentPage(currentPage - 1)
+                                        setCurrentPage(Math.max(currentPage - 1, 1))
                                     }
                                 }}
                                 disabled={currentPage === 1}
@@ -133,7 +135,7 @@ const UserList = () => {
                             </PaginationPrevious>
                         </PaginationItem>
 
-                        {Array.from({ length: Math.ceil(totalRecords / pageSize) }, (_, index) => (
+                        {Array.from({ length: totalPages }, (_, index) => (
                             <PaginationItem key={index + 1}>
                                 <PaginationLink
                                     onClick={() => setCurrentPage(index + 1)}
@@ -147,13 +149,13 @@ const UserList = () => {
                         <PaginationItem>
                             <PaginationNext
                                 onClick={() => {
-                                    const maxPage = Math.ceil(totalRecords / pageSize);
-                                    if (currentPage < maxPage) {
-                                        setCurrentPage(currentPage + 1);
+                                    if (currentPage < totalPages) {
+                                        setCurrentPage(Math.min(currentPage + 1, totalPages))
                                     }
-                                }}
-                                disabled={currentPage === Math.ceil(totalRecords / pageSize)}
-                                className={`px-4 py-2 bg-gray-700 text-white ${currentPage === Math.ceil(totalRecords / pageSize) ? 'opacity-50 cursor-not-allowed' : ''}`}
+                                }
+                                }
+                                disabled={currentPage === totalPages}
+                                className={`px-4 py-2 bg-gray-700 text-white ${currentPage === totalPages ? 'opacity-50 cursor-not-allowed' : ''}`}
                             >
                                 Next
                             </PaginationNext>
@@ -173,7 +175,7 @@ const UserList = () => {
                     <option value={20}>Show 20</option>
                 </select>
             </div>
-        </div>
+        </div >
     );
 };
 
