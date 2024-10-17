@@ -1,4 +1,3 @@
-import React from 'react'
 import { useForm } from 'react-hook-form'
 import { zodResolver } from "@hookform/resolvers/zod"
 import { loginSchema } from "../loginValidationSchema"
@@ -54,7 +53,7 @@ const Login = () => {
                 </div>
 
                 <div className='mb-5 text-right'>
-                    Don't have an account? <NavLink to="/add-user" className="text-blue-600 hover:underline">Register</NavLink>
+                    Don&apos;t have an account? <NavLink to="/add-user" className="text-blue-600 hover:underline">Register</NavLink>
                 </div>
 
                 <button type='submit' className='bg-blue-500 text-white p-2 rounded w-full hover:bg-blue-800'>Login</button>

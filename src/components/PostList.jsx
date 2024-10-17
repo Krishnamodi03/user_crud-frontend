@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import axios from 'axios';
 import { Link } from 'react-router-dom';
 import {
@@ -14,7 +14,7 @@ import {
 const PostList = () => {
     const [posts, setPosts] = useState([]);
     const [search, setSearch] = useState('');
-    const [error, setError] = useState(false);
+    const [setError] = useState(false);
     const [currentPage, setCurrentPage] = useState(1);
     const postsPerPage = 5;
 

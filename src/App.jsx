@@ -44,9 +44,7 @@
 
 
 
-import React from 'react';
-import { BrowserRouter as Router, Route, Routes, createBrowserRouter, RouterProvider } from 'react-router-dom';
-import PostList from './components/PostList';
+import { createBrowserRouter, RouterProvider } from 'react-router-dom';
 import PostDetail from './components/PostDetail';
 import UserList from './components/UserList';
 import AddUser from './components/AddUser';
